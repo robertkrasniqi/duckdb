@@ -14,6 +14,7 @@
 namespace duckdb {
 
 class ColumnBindingResolver;
+class FlattenDependentJoins;
 
 struct LogicalExtensionOperator : public LogicalOperator {
 public:
@@ -33,5 +34,10 @@ public:
 
 	virtual void ResolveColumnBindings(ColumnBindingResolver &res, vector<ColumnBinding> &bindings);
 	virtual string GetExtensionName() const;
+
+	// correlation hook
+	virtual vector<ColumnBinding> PushdownDependentJoin(FlattenDependentJoins &flattener,
+	                                                    unique_ptr<LogicalOperator> &plan, bool propagate_null_values,
+	                                                    vector<ColumnBinding> state);
 };
 } // namespace duckdb

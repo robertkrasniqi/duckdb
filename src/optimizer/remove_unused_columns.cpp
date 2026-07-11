@@ -680,6 +680,13 @@ void RemoveUnusedColumns::VisitOperator(unique_ptr<LogicalOperator> &op_ref) {
 		everything_referenced = true;
 		break;
 	}
+	// FIXME: Do I need this?
+	/*
+	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
+		everything_referenced = true;
+		break;
+	}
+	*/
 	default:
 		break;
 	}

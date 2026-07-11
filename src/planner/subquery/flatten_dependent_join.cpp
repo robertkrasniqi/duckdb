@@ -533,6 +533,12 @@ void FlattenDependentJoins::AddCTERefJoinConditions(LogicalComparisonJoin &join,
 		join.conditions.push_back(std::move(cond));
 	}
 }
+vector<ColumnBinding> FlattenDependentJoins::PushDownExtensionChild(unique_ptr<LogicalOperator> &plan,
+                                                                    bool propagate_null_values,
+                                                                    vector<ColumnBinding> state, idx_t child_idx,
+                                                                    bool rewrite_parent) {
+	return PushDownChild(plan, propagate_null_values, std::move(state), rewrite_parent, child_idx);
+}
 
 void FlattenDependentJoins::AddCorrelatedJoinConditions(LogicalJoin &join, const vector<ColumnBinding> &left_state,
                                                         const vector<ColumnBinding> &right_state) const {
@@ -1489,6 +1495,10 @@ FlattenDependentJoins::PushDownCorrelatedNodeInternal(unique_ptr<LogicalOperator
 	}
 	case LogicalOperatorType::LOGICAL_CTE_REF: {
 		return PushDownCTERef(plan);
+	}
+	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
+		auto &ext = plan->Cast<LogicalExtensionOperator>();
+		return ext.PushdownDependentJoin(*this, plan, propagate_null_values, std::move(state));
 	}
 	case LogicalOperatorType::LOGICAL_DELIM_JOIN: {
 		throw BinderException("Nested lateral joins or lateral joins in correlated subqueries are not (yet) supported");

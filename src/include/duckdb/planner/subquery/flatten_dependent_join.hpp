@@ -29,6 +29,10 @@ class FlattenDependentJoins {
 public:
 	static unique_ptr<LogicalOperator> DecorrelateIndependent(Binder &binder, unique_ptr<LogicalOperator> plan);
 
+	vector<ColumnBinding> PushDownExtensionChild(unique_ptr<LogicalOperator> &plan, bool propagate_null_values,
+	                                             vector<ColumnBinding> state, idx_t child_idx = 0,
+	                                             bool rewrite_parent = true);
+
 private:
 	struct UnnestingState {
 		explicit UnnestingState(vector<ColumnBinding> bindings_p) : bindings(std::move(bindings_p)) {

@@ -41,4 +41,11 @@ string LogicalExtensionOperator::GetExtensionName() const {
 	                             "serializing extension operators");
 }
 
+vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDependentJoins &,
+                                                                     unique_ptr<LogicalOperator> &, bool,
+                                                                     const vector<ColumnBinding>) {
+	// default case: this extension operator has not implemented correlation handling
+	throw BinderException("Extension operator \"%s\" is not supported inside a correlated subquery", GetExtensionName());
+}
+
 } // namespace duckdb
