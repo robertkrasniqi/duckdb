@@ -3,6 +3,7 @@
 #include "duckdb/common/serializer/serializer.hpp"
 #include "duckdb/common/serializer/deserializer.hpp"
 #include "duckdb/planner/operator_extension.hpp"
+#include "duckdb/planner/subquery/flatten_dependent_join.hpp"
 
 namespace duckdb {
 
@@ -41,11 +42,24 @@ string LogicalExtensionOperator::GetExtensionName() const {
 	                             "serializing extension operators");
 }
 
+bool LogicalExtensionOperator::RequiresAllColumns() const {
+	return true;
+}
+
 vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDependentJoins &,
-                                                                     unique_ptr<LogicalOperator> &, bool,
-                                                                     const vector<ColumnBinding>) {
+                                                                      unique_ptr<LogicalOperator> &, bool,
+                                                                      const vector<ColumnBinding>) {
 	// default case: this extension operator has not implemented correlation handling
-	throw BinderException("Extension operator \"%s\" is not supported inside a correlated subquery", GetExtensionName());
+	throw BinderException("Extension operator \"%s\" is not supported inside a correlated subquery",
+	                      GetExtensionName());
+}
+
+vector<ColumnBinding> LogicalExtensionOperator::PushDownDependentJoinChild(FlattenDependentJoins &flattener,
+                                                                           unique_ptr<LogicalOperator> &plan,
+                                                                           bool propagate_null_values,
+                                                                           vector<ColumnBinding> state, idx_t child_idx,
+                                                                           bool rewrite_parent) {
+	return flattener.PushDownChild(plan, propagate_null_values, std::move(state), rewrite_parent, child_idx);
 }
 
 } // namespace duckdb

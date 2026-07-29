@@ -20,8 +20,10 @@ namespace duckdb {
 class LogicalAggregate;
 class LogicalComparisonJoin;
 class LogicalCTERef;
+class LogicalDependentJoin;
 class LogicalExpressionGet;
 class LogicalJoin;
+struct LogicalExtensionOperator;
 
 //! The FlattenDependentJoins class is responsible for pushing the dependent join down into the plan to create a
 //! flattened subquery
@@ -34,6 +36,8 @@ public:
 	                                             bool rewrite_parent = true);
 
 private:
+	friend struct LogicalExtensionOperator;
+
 	struct UnnestingState {
 		explicit UnnestingState(vector<ColumnBinding> bindings_p) : bindings(std::move(bindings_p)) {
 		}
@@ -100,6 +104,7 @@ private:
 	                             bool include_names) const;
 	void AddDelimColumnsToGroup(LogicalAggregate &aggr, const vector<ColumnBinding> &state) const;
 	void AddCorrelatedFirstAggregates(LogicalAggregate &aggr, const vector<ColumnBinding> &state) const;
+	void AddAnyJoinConditions(LogicalDependentJoin &op, const vector<ColumnBinding> &plan_columns) const;
 	void AddCTERefJoinConditions(LogicalComparisonJoin &join, const LogicalCTERef &cteref,
 	                             const vector<ColumnBinding> &state) const;
 	void AddCorrelatedJoinConditions(LogicalJoin &join, const vector<ColumnBinding> &left_state,
