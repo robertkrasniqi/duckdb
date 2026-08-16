@@ -681,6 +681,7 @@ void RemoveUnusedColumns::VisitOperator(unique_ptr<LogicalOperator> &op_ref) {
 		everything_referenced = true;
 		break;
 	}
+		/*
 	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
 		auto &ext = op.Cast<LogicalExtensionOperator>();
 		if (ext.RequiresAllColumns()) {
@@ -688,6 +689,7 @@ void RemoveUnusedColumns::VisitOperator(unique_ptr<LogicalOperator> &op_ref) {
 		}
 		break;
 	}
+	*/
 	default:
 		break;
 	}
