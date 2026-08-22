@@ -1492,7 +1492,11 @@ FlattenDependentJoins::PushDownCorrelatedNodeInternal(unique_ptr<LogicalOperator
 	}
 	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
 		auto &ext = plan->Cast<LogicalExtensionOperator>();
-		return ext.PushdownDependentJoin(*this, plan, propagate_null_values, std::move(state));
+		BindingReplacementGraph replacement_graph;
+		UnnestingState result(
+		    ext.PushdownDependentJoin(*this, plan, propagate_null_values, std::move(state), replacement_graph));
+		result.replacement_graph = std::move(replacement_graph);
+		return result;
 	}
 	case LogicalOperatorType::LOGICAL_DELIM_JOIN: {
 		throw BinderException("Nested lateral joins or lateral joins in correlated subqueries are not (yet) supported");

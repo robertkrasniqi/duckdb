@@ -20,7 +20,6 @@ namespace duckdb {
 class LogicalAggregate;
 class LogicalComparisonJoin;
 class LogicalCTERef;
-class LogicalDependentJoin;
 class LogicalExpressionGet;
 class LogicalJoin;
 struct LogicalExtensionOperator;
@@ -30,10 +29,6 @@ struct LogicalExtensionOperator;
 class FlattenDependentJoins {
 public:
 	static unique_ptr<LogicalOperator> DecorrelateIndependent(Binder &binder, unique_ptr<LogicalOperator> plan);
-
-	vector<ColumnBinding> PushDownExtensionChild(unique_ptr<LogicalOperator> &plan, bool propagate_null_values,
-	                                             vector<ColumnBinding> state, idx_t child_idx = 0,
-	                                             bool rewrite_parent = true);
 
 private:
 	friend struct LogicalExtensionOperator;
@@ -104,7 +99,6 @@ private:
 	                             bool include_names) const;
 	void AddDelimColumnsToGroup(LogicalAggregate &aggr, const vector<ColumnBinding> &state) const;
 	void AddCorrelatedFirstAggregates(LogicalAggregate &aggr, const vector<ColumnBinding> &state) const;
-	void AddAnyJoinConditions(LogicalDependentJoin &op, const vector<ColumnBinding> &plan_columns) const;
 	void AddCTERefJoinConditions(LogicalComparisonJoin &join, const LogicalCTERef &cteref,
 	                             const vector<ColumnBinding> &state) const;
 	void AddCorrelatedJoinConditions(LogicalJoin &join, const vector<ColumnBinding> &left_state,

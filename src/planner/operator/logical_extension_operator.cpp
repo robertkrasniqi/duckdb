@@ -48,7 +48,8 @@ bool LogicalExtensionOperator::RequiresAllColumns() const {
 
 vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDependentJoins &,
                                                                       unique_ptr<LogicalOperator> &, bool,
-                                                                      const vector<ColumnBinding>) {
+                                                                      vector<ColumnBinding>,
+                                                                      BindingReplacementGraph &) {
 	// default case: this extension operator has not implemented correlation handling
 	throw BinderException("Extension operator \"%s\" is not supported inside a correlated subquery",
 	                      GetExtensionName());
@@ -57,9 +58,12 @@ vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDep
 vector<ColumnBinding> LogicalExtensionOperator::PushDownDependentJoinChild(FlattenDependentJoins &flattener,
                                                                            unique_ptr<LogicalOperator> &plan,
                                                                            bool propagate_null_values,
-                                                                           vector<ColumnBinding> state, idx_t child_idx,
-                                                                           bool rewrite_parent) {
-	return flattener.PushDownChild(plan, propagate_null_values, std::move(state), rewrite_parent, child_idx);
+                                                                           vector<ColumnBinding> state,
+                                                                           BindingReplacementGraph &replacement_graph,
+                                                                           idx_t child_idx, bool rewrite_parent) {
+	auto result = flattener.PushDownChild(plan, propagate_null_values, std::move(state), rewrite_parent, child_idx);
+	replacement_graph = std::move(result.replacement_graph);
+	return std::move(result.bindings);
 }
 
 } // namespace duckdb

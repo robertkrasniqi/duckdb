@@ -10,6 +10,7 @@
 
 #include "duckdb/planner/logical_operator.hpp"
 #include "duckdb/planner/operator_extension.hpp"
+#include "duckdb/optimizer/column_binding_replacer.hpp"
 
 namespace duckdb {
 
@@ -41,13 +42,15 @@ public:
 	// correlation hook
 	virtual vector<ColumnBinding> PushdownDependentJoin(FlattenDependentJoins &flattener,
 	                                                    unique_ptr<LogicalOperator> &plan, bool propagate_null_values,
-	                                                    vector<ColumnBinding> state);
+	                                                    vector<ColumnBinding> state,
+	                                                    BindingReplacementGraph &replacement_graph);
 
 protected:
 	// Helper for PushdownDependentJoin, calls FlattenDependentJoins::PushDownChild
 	static vector<ColumnBinding> PushDownDependentJoinChild(FlattenDependentJoins &flattener,
 	                                                        unique_ptr<LogicalOperator> &plan,
 	                                                        bool propagate_null_values, vector<ColumnBinding> state,
+	                                                        BindingReplacementGraph &replacement_graph,
 	                                                        idx_t child_idx = 0, bool rewrite_parent = true);
 };
 } // namespace duckdb
