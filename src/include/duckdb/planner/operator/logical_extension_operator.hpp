@@ -36,9 +36,6 @@ public:
 	virtual void ResolveColumnBindings(ColumnBindingResolver &res, vector<ColumnBinding> &bindings);
 	virtual string GetExtensionName() const;
 
-	// Whether the optimizer must treat all of this operator's input columns as referenced
-	virtual bool RequiresAllColumns() const;
-
 	// correlation hook
 	virtual vector<ColumnBinding> PushdownDependentJoin(FlattenDependentJoins &flattener,
 	                                                    unique_ptr<LogicalOperator> &plan, bool propagate_null_values,

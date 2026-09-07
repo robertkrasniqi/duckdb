@@ -25,7 +25,6 @@
 #include "duckdb/planner/operator/logical_set_operation.hpp"
 #include "duckdb/planner/operator/logical_cte.hpp"
 #include "duckdb/planner/operator/logical_cteref.hpp"
-#include "duckdb/planner/operator/logical_extension_operator.hpp"
 #include "duckdb/function/scalar/struct_utils.hpp"
 #include "duckdb/function/scalar/variant_utils.hpp"
 #include "duckdb/function/scalar/nested_functions.hpp"
@@ -681,15 +680,6 @@ void RemoveUnusedColumns::VisitOperator(unique_ptr<LogicalOperator> &op_ref) {
 		everything_referenced = true;
 		break;
 	}
-		/*
-	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
-		auto &ext = op.Cast<LogicalExtensionOperator>();
-		if (ext.RequiresAllColumns()) {
-			everything_referenced = true;
-		}
-		break;
-	}
-	*/
 	default:
 		break;
 	}

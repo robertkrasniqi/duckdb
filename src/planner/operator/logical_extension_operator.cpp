@@ -42,10 +42,6 @@ string LogicalExtensionOperator::GetExtensionName() const {
 	                             "serializing extension operators");
 }
 
-bool LogicalExtensionOperator::RequiresAllColumns() const {
-	return true;
-}
-
 vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDependentJoins &,
                                                                       unique_ptr<LogicalOperator> &, bool,
                                                                       vector<ColumnBinding>,
