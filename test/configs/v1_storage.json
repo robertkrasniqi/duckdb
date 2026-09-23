@@ -12,6 +12,13 @@
   "skip_compiled": "true",
   "skip_tests": [
     {
+      "reason": "Explicit constraint timing requires storage version v2.0.0 or higher.",
+      "paths": [
+        "test/sql/constraints/deferred/test_alter_constraint_timing.test",
+        "test/sql/constraints/deferred/test_deferred_syntax.test"
+      ]
+    },
+    {
       "reason": "TODO",
       "paths": [
         "test/extension/autoloading_types.test",
@@ -28,6 +35,15 @@
       "reason": "Attached databases have a main schema, which is not implicit.",
       "paths": [
         "test/fuzzer/sqlsmith/current_schemas_null.test"
+      ]
+    },
+    {
+      "reason": "CREATE SECURE VIEW requires v2.0.0 storage.",
+      "paths": [
+        "test/sql/catalog/view/secure_view.test",
+        "test/sql/optimizer/secure_view_explain.test",
+        "test/sql/optimizer/secure_view_pushdown.test",
+        "test/sql/optimizer/secure_view_statistics.test"
       ]
     }
   ]

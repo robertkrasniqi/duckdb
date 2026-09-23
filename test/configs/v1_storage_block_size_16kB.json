@@ -13,6 +13,13 @@
   "inherit_skip_tests": "test/configs/force_storage.json",
   "skip_tests": [
     {
+      "reason": "Explicit constraint timing requires storage version v2.0.0 or higher.",
+      "paths": [
+        "test/sql/constraints/deferred/test_alter_constraint_timing.test",
+        "test/sql/constraints/deferred/test_deferred_syntax.test"
+      ]
+    },
+    {
       "reason": "TODO",
       "paths": [
         "test/sql/json/test_json_serialize_sql.test",
@@ -24,6 +31,15 @@
       "reason": "ALP is disabled for non-default block sizes.",
       "paths": [
         "test/sql/storage/compression/alp/alp_min_max.test"
+      ]
+    },
+    {
+      "reason": "CREATE SECURE VIEW requires v2.0.0 storage.",
+      "paths": [
+        "test/sql/catalog/view/secure_view.test",
+        "test/sql/optimizer/secure_view_explain.test",
+        "test/sql/optimizer/secure_view_pushdown.test",
+        "test/sql/optimizer/secure_view_statistics.test"
       ]
     }
   ]
