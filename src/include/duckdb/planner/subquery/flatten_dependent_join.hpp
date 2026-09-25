@@ -23,7 +23,6 @@ class LogicalComparisonJoin;
 class LogicalCTERef;
 class LogicalExpressionGet;
 class LogicalJoin;
-struct LogicalExtensionOperator;
 
 //! The FlattenDependentJoins class is responsible for pushing the dependent join down into the plan to create a
 //! flattened subquery
@@ -32,8 +31,6 @@ public:
 	static unique_ptr<LogicalOperator> DecorrelateIndependent(Binder &binder, unique_ptr<LogicalOperator> plan);
 
 private:
-	friend struct LogicalExtensionOperator;
-
 	struct UnnestingState {
 		explicit UnnestingState(vector<ColumnBinding> bindings_p) : bindings(std::move(bindings_p)) {
 		}

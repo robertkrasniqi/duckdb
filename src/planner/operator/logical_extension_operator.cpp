@@ -3,7 +3,6 @@
 #include "duckdb/common/serializer/serializer.hpp"
 #include "duckdb/common/serializer/deserializer.hpp"
 #include "duckdb/planner/operator_extension.hpp"
-#include "duckdb/planner/subquery/flatten_dependent_join.hpp"
 
 namespace duckdb {
 
@@ -40,26 +39,6 @@ unique_ptr<LogicalOperator> LogicalExtensionOperator::Deserialize(Deserializer &
 string LogicalExtensionOperator::GetExtensionName() const {
 	throw SerializationException("LogicalExtensionOperator::GetExtensionName not implemented which is required for "
 	                             "serializing extension operators");
-}
-
-vector<ColumnBinding> LogicalExtensionOperator::PushdownDependentJoin(FlattenDependentJoins &,
-                                                                      unique_ptr<LogicalOperator> &, bool,
-                                                                      vector<ColumnBinding>,
-                                                                      BindingReplacementGraph &) {
-	// default case: this extension operator has not implemented correlation handling
-	throw BinderException("Extension operator \"%s\" is not supported inside a correlated subquery",
-	                      GetExtensionName());
-}
-
-vector<ColumnBinding> LogicalExtensionOperator::PushDownDependentJoinChild(FlattenDependentJoins &flattener,
-                                                                           unique_ptr<LogicalOperator> &plan,
-                                                                           bool propagate_null_values,
-                                                                           vector<ColumnBinding> state,
-                                                                           BindingReplacementGraph &replacement_graph,
-                                                                           idx_t child_idx, bool rewrite_parent) {
-	auto result = flattener.PushDownChild(plan, propagate_null_values, std::move(state), rewrite_parent, child_idx);
-	replacement_graph = std::move(result.replacement_graph);
-	return std::move(result.bindings);
 }
 
 } // namespace duckdb
