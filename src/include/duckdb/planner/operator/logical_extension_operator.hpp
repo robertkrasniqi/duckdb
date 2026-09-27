@@ -38,11 +38,5 @@ public:
 
 	virtual void ResolveColumnBindings(ColumnBindingResolver &res, vector<ColumnBinding> &bindings);
 	virtual string GetExtensionName() const;
-
-	//! Whether a dependent join can be pushed into the child
-	//! Only for operators with a single child
-	virtual bool SupportsDecorrelation() const {
-		return false;
-	}
 };
 } // namespace duckdb
