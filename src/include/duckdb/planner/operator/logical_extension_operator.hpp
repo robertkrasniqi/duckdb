@@ -39,7 +39,7 @@ public:
 	virtual void ResolveColumnBindings(ColumnBindingResolver &res, vector<ColumnBinding> &bindings);
 	virtual string GetExtensionName() const;
 
-	//! Extensions can specify how dependent joins may be pushed into childs
+	//! Extensions can specify how dependent joins may be pushed into children
 	enum class DecorrelationMode : uint8_t {
 		NOT_SUPPORTED,
 		SINGLE_CHILD_PASSTHROUGH,
