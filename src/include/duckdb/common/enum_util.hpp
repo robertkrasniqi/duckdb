@@ -186,6 +186,8 @@ enum class DebugVerificationMode : uint8_t;
 
 enum class DecimalBitWidth : uint8_t;
 
+enum class DecorrelationMode : uint8_t;
+
 enum class DefaultOrderByNullType : uint8_t;
 
 enum class DeferredRuntimeFilterType : uint8_t;
@@ -893,6 +895,9 @@ const char* EnumUtil::ToChars<DebugVerificationMode>(DebugVerificationMode value
 
 template<>
 const char* EnumUtil::ToChars<DecimalBitWidth>(DecimalBitWidth value);
+
+template<>
+const char* EnumUtil::ToChars<DecorrelationMode>(DecorrelationMode value);
 
 template<>
 const char* EnumUtil::ToChars<DefaultOrderByNullType>(DefaultOrderByNullType value);
@@ -1839,6 +1844,9 @@ DebugVerificationMode EnumUtil::FromString<DebugVerificationMode>(const char *va
 
 template<>
 DecimalBitWidth EnumUtil::FromString<DecimalBitWidth>(const char *value);
+
+template<>
+DecorrelationMode EnumUtil::FromString<DecorrelationMode>(const char *value);
 
 template<>
 DefaultOrderByNullType EnumUtil::FromString<DefaultOrderByNullType>(const char *value);

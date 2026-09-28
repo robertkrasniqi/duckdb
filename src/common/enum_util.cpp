@@ -225,6 +225,7 @@
 #include "duckdb/planner/bound_result_modifier.hpp"
 #include "duckdb/planner/filter/table_filter_functions.hpp"
 #include "duckdb/planner/logical_operator_repeatability.hpp"
+#include "duckdb/planner/operator/logical_extension_operator.hpp"
 #include "duckdb/planner/table_filter.hpp"
 #include "duckdb/storage/buffer/buffer_pool_reservation.hpp"
 #include "duckdb/storage/caching_mode.hpp"
@@ -1824,6 +1825,24 @@ const char* EnumUtil::ToChars<DecimalBitWidth>(DecimalBitWidth value) {
 template<>
 DecimalBitWidth EnumUtil::FromString<DecimalBitWidth>(const char *value) {
 	return static_cast<DecimalBitWidth>(StringUtil::StringToEnum(GetDecimalBitWidthValues(), 4, "DecimalBitWidth", value));
+}
+
+const StringUtil::EnumStringLiteral *GetDecorrelationModeValues() {
+	static constexpr StringUtil::EnumStringLiteral values[] {
+		{ static_cast<uint32_t>(DecorrelationMode::NOT_SUPPORTED), "NOT_SUPPORTED" },
+		{ static_cast<uint32_t>(DecorrelationMode::SINGLE_CHILD_PASSTHROUGH), "SINGLE_CHILD_PASSTHROUGH" }
+	};
+	return values;
+}
+
+template<>
+const char* EnumUtil::ToChars<DecorrelationMode>(DecorrelationMode value) {
+	return StringUtil::EnumToString(GetDecorrelationModeValues(), 2, "DecorrelationMode", static_cast<uint32_t>(value));
+}
+
+template<>
+DecorrelationMode EnumUtil::FromString<DecorrelationMode>(const char *value) {
+	return static_cast<DecorrelationMode>(StringUtil::StringToEnum(GetDecorrelationModeValues(), 2, "DecorrelationMode", value));
 }
 
 const StringUtil::EnumStringLiteral *GetDefaultOrderByNullTypeValues() {
