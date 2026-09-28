@@ -1550,7 +1550,7 @@ FlattenDependentJoins::PushDownCorrelatedNodeInternal(unique_ptr<LogicalOperator
 	case LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR: {
 		auto &ext = plan->Cast<LogicalExtensionOperator>();
 		switch (ext.GetDecorrelationMode()) {
-		case LogicalExtensionOperator::DecorrelationMode::SINGLE_CHILD_PASSTHROUGH:
+		case DecorrelationMode::SINGLE_CHILD_PASSTHROUGH:
 			D_ASSERT(plan->children.size() == 1);
 			return PushDownChild(plan, propagate_null_values, std::move(state));
 		default:

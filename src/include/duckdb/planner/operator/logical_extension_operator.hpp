@@ -15,6 +15,12 @@ namespace duckdb {
 
 class ColumnBindingResolver;
 
+//! Extensions can specify how dependent joins may be pushed into children
+enum class DecorrelationMode : uint8_t {
+	NOT_SUPPORTED,
+	SINGLE_CHILD_PASSTHROUGH,
+};
+
 struct LogicalExtensionOperator : public LogicalOperator {
 public:
 	static constexpr const LogicalOperatorType TYPE = LogicalOperatorType::LOGICAL_EXTENSION_OPERATOR;
@@ -38,12 +44,6 @@ public:
 
 	virtual void ResolveColumnBindings(ColumnBindingResolver &res, vector<ColumnBinding> &bindings);
 	virtual string GetExtensionName() const;
-
-	//! Extensions can specify how dependent joins may be pushed into children
-	enum class DecorrelationMode : uint8_t {
-		NOT_SUPPORTED,
-		SINGLE_CHILD_PASSTHROUGH,
-	};
 
 	virtual DecorrelationMode GetDecorrelationMode() const {
 		return DecorrelationMode::NOT_SUPPORTED;
